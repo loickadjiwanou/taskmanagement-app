@@ -75,7 +75,7 @@ const Task = ({ data, onModalChange }) => {
           setTaskModal(false);
           onModalChange(null);
         }}
-        style={[TaskStyle.modal, { margin: 0 }]}
+        style={TaskStyle.modal}
         animationIn="fadeInUp"
         animationOut="fadeOutDown"
         backdropOpacity={0.6}

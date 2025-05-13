@@ -9,7 +9,7 @@ const HomeStyle = StyleSheet.create({
     // overflow: "hidden",
   },
   footer: {
-    marginBottom: "10%",
+    marginBottom: "15%",
   },
 });
 export default HomeStyle;

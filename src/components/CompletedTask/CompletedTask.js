@@ -24,7 +24,7 @@ const CompletedTask = ({ data, onModalChange }) => {
           setTaskModal(false);
           onModalChange(null);
         }}
-        style={[CompletedTaskStyle.modal, { margin: 0 }]}
+        style={CompletedTaskStyle.modal}
         animationIn="fadeInUp"
         animationOut="fadeOutDown"
         backdropOpacity={0.6}

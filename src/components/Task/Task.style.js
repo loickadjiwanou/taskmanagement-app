@@ -146,13 +146,14 @@ const TaskStyle = StyleSheet.create({
   modal: {
     justifyContent: "center",
     alignSelf: "center",
-    bottom: Platform.OS === "ios" ? -20 : 0,
+    bottom: Platform.OS === "ios" ? 0 : 0,
     position: "absolute",
     width: "100%",
+    margin: 0,
   },
   modalContent: {
     backgroundColor: colors.white,
-    height: hp("94%"),
+    height: Platform.OS === "ios" ? hp("92%") : hp("86%"),
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 15,

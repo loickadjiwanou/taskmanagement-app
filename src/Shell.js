@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Alert,
+  Platform,
+} from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import colors from "./assets/colors/colors";
 import avatar from "./assets/icons/avatar.png";
@@ -104,7 +111,7 @@ const CustomDrawerContent = (props) => {
         style={{
           paddingHorizontal: 15,
           position: "absolute",
-          bottom: 40,
+          bottom: Platform.OS === "ios" ? 40 : 55,
           left: 0,
           right: 0,
         }}
@@ -169,7 +176,7 @@ const Shell = () => {
           // props du gesture handler
           activeOffsetX: [-10, 10],
         },
-        keyboardDismissMode: "on-drag", // 'none' ou 'on-drag'
+        // keyboardDismissMode: "on-drag", // 'none' ou 'on-drag'
         minSwipeDistance: 50, // distance minimale de swipe
         hideStatusBar: false, // cacher la status bar
         statusBarAnimation: "fade", // animation de la status bar
