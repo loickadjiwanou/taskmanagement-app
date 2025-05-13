@@ -152,7 +152,7 @@ const TaskStyle = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: colors.white,
-    height: hp("90%"),
+    height: hp("94%"),
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 15,

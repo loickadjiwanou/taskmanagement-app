@@ -248,61 +248,73 @@ const Home = (props) => {
   }, [modalDisplayed]);
 
   return (
-    <Animated.View
-      style={[
-        HomeStyle.view,
-        {
-          transform: [{ scale: scaleValue }],
-        },
-      ]}
-    >
-      <BlurView intensity={20} tint="dark" style={HomeStyle.backgroundBlur}>
-        <CalendarWeek />
-      </BlurView>
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        vertical
-        overScrollMode="never"
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor={colors.white}
-          />
-        }
+    <View style={{ flex: 1, backgroundColor: "black" }}>
+      <Animated.View
+        style={[
+          HomeStyle.view,
+          {
+            transform: [{ scale: scaleValue }],
+            borderRadius: modalDisplayed ? 20 : 0,
+          },
+        ]}
       >
-        {tasks.map(
-          (task) =>
-            task.completed && (
-              <CompletedTask
-                key={task.id}
-                data={task}
-                onModalChange={handleModalState}
-              />
-            )
-        )}
+        <View
+          style={[
+            HomeStyle.backgroundBlur,
+            {
+              backgroundColor: "transparent",
+              borderRadius: 30,
+              marginBottom: 2,
+            },
+          ]}
+        >
+          <CalendarWeek />
+        </View>
 
-        {tasks.map(
-          (task) =>
-            !task.completed && (
-              <Task
-                key={task.id}
-                data={task}
-                onModalChange={handleModalState}
-              />
-            )
-        )}
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          vertical
+          overScrollMode="never"
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={colors.white}
+            />
+          }
+        >
+          {tasks.map(
+            (task) =>
+              task.completed && (
+                <CompletedTask
+                  key={task.id}
+                  data={task}
+                  onModalChange={handleModalState}
+                />
+              )
+          )}
 
-        <View style={HomeStyle.footer} />
-      </ScrollView>
+          {tasks.map(
+            (task) =>
+              !task.completed && (
+                <Task
+                  key={task.id}
+                  data={task}
+                  onModalChange={handleModalState}
+                />
+              )
+          )}
 
-      <StatusBar
-        barStyle={"light-content"}
-        translucent={true}
-        backgroundColor="transparent"
-      />
-    </Animated.View>
+          <View style={HomeStyle.footer} />
+        </ScrollView>
+
+        <StatusBar
+          barStyle={"light-content"}
+          translucent={true}
+          backgroundColor="transparent"
+        />
+      </Animated.View>
+    </View>
   );
 };
 export default Home;

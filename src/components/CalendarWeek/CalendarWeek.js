@@ -12,8 +12,10 @@ import { Entypo, Feather } from "@expo/vector-icons";
 import dayjs from "dayjs";
 import * as Haptics from "expo-haptics";
 import avatar from "../../assets/icons/avatar.png";
+import { useNavigation } from "@react-navigation/native";
 
 const CalendarWeek = (props) => {
+  const navigation = useNavigation();
   const theme = useColorScheme();
 
   const months = [
@@ -84,7 +86,13 @@ const CalendarWeek = (props) => {
   };
 
   const handlePressMenu = () => {
-    console.info("menu drawer");
+    navigation.openDrawer();
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+  };
+
+  const handleProfile = () => {
+    navigation.navigate("Profile");
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
   };
 
   return (
@@ -93,7 +101,9 @@ const CalendarWeek = (props) => {
         <TouchableOpacity onPress={handlePressMenu}>
           <Feather name="menu" size={34} color={colors.white} />
         </TouchableOpacity>
-        <Image source={avatar} style={CalendarWeekStyle.avatar} />
+        <TouchableOpacity onPress={handleProfile}>
+          <Image source={avatar} style={CalendarWeekStyle.avatar} />
+        </TouchableOpacity>
       </View>
       <View style={CalendarWeekStyle.header}>
         <Text style={CalendarWeekStyle.title}>

@@ -24,10 +24,11 @@ const CompletedTask = ({ data, onModalChange }) => {
           setTaskModal(false);
           onModalChange(null);
         }}
-        style={CompletedTaskStyle.modal}
+        style={[CompletedTaskStyle.modal, { margin: 0 }]}
         animationIn="fadeInUp"
         animationOut="fadeOutDown"
-        backdropOpacity={0.5}
+        backdropOpacity={0.6}
+        backdropColor="black"
       >
         <View style={CompletedTaskStyle.modalContent}>
           <View style={CompletedTaskStyle.modalBar} />

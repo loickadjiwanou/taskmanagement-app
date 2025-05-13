@@ -75,10 +75,11 @@ const Task = ({ data, onModalChange }) => {
           setTaskModal(false);
           onModalChange(null);
         }}
-        style={TaskStyle.modal}
+        style={[TaskStyle.modal, { margin: 0 }]}
         animationIn="fadeInUp"
         animationOut="fadeOutDown"
-        backdropOpacity={0.5}
+        backdropOpacity={0.6}
+        backdropColor="black"
       >
         <View style={TaskStyle.modalContent}>
           <View style={TaskStyle.modalBar} />

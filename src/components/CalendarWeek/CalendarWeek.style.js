@@ -9,7 +9,7 @@ const CalendarWeekStyle = StyleSheet.create({
     paddingBottom: 20,
   },
   top: {
-    marginVertical: 10,
+    // marginVertical: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

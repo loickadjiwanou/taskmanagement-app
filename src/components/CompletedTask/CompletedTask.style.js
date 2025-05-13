@@ -13,6 +13,7 @@ const CompletedTaskStyle = StyleSheet.create({
     borderRadius: 30,
     paddingVertical: 15,
     marginTop: 6,
+    overflow: "hidden",
   },
   text: {
     justifyContent: "center",
@@ -46,7 +47,7 @@ const CompletedTaskStyle = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: colors.white,
-    height: hp("90%"),
+    height: hp("94%"),
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 15,
