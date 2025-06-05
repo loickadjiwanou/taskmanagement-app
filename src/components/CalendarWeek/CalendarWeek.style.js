@@ -2,11 +2,14 @@ import { StyleSheet } from "react-native";
 import colors from "../../assets/colors/colors";
 const CalendarWeekStyle = StyleSheet.create({
   view: {
-    paddingTop: 55,
+    paddingTop: 45,
     backgroundColor: colors.red,
-    borderRadius: 30,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
     paddingHorizontal: 15,
     paddingBottom: 20,
+    overflow: "hidden",
+    // height: 250,
   },
   top: {
     // marginVertical: 10,

@@ -7,13 +7,12 @@ import {
   useColorScheme,
   ScrollView,
   RefreshControl,
-  Modal,
-  SafeAreaView,
 } from "react-native";
 import TaskStyle from "./Task.style.js";
 import colors from "../../assets/colors/colors.js";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import avatar from "../../assets/icons/avatar.png";
+import Modal from "react-native-modal";
 import * as Haptics from "expo-haptics";
 
 const Task = ({ data, onModalChange }) => {
@@ -23,7 +22,7 @@ const Task = ({ data, onModalChange }) => {
   const handleTaskModal = () => {
     setTaskModal(!taskModal);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
-    onModalChange(taskModal ? null : data);
+    onModalChange(data);
   };
 
   const renderTaskPlan = (plan) => {
@@ -71,122 +70,123 @@ const Task = ({ data, onModalChange }) => {
   const renderTaskModal = () => {
     return (
       <Modal
-        animationType="slide"
-        visible={taskModal}
-        presentationStyle="pageSheet"
-        onRequestClose={() => {
+        isVisible={taskModal}
+        onBackdropPress={() => {
           setTaskModal(false);
           onModalChange(null);
         }}
+        style={TaskStyle.modal}
+        animationIn="fadeInUp"
+        animationOut="fadeOutDown"
+        backdropOpacity={0.5}
       >
-        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-          <View style={TaskStyle.modalContent}>
-            {/* Header avec barre de fermeture */}
-            <View style={TaskStyle.modalBar} />
+        <View style={TaskStyle.modalContent}>
+          <View style={TaskStyle.modalBar} />
 
-            <View style={TaskStyle.modalTop}>
-              <TouchableOpacity
-                onPress={() => {
-                  setTaskModal(false);
-                  onModalChange(null);
-                }}
-                style={TaskStyle.closeIcon}
-              >
-                <Ionicons name="close" size={30} color={colors.black} />
-              </TouchableOpacity>
+          <View style={TaskStyle.modalTop}>
+            <TouchableOpacity
+              onPress={() => {
+                setTaskModal(false);
+                onModalChange(null);
+              }}
+              style={TaskStyle.closeIcon}
+            >
+              <Ionicons name="close" size={30} color={colors.black} />
+            </TouchableOpacity>
 
-              <TouchableOpacity style={TaskStyle.editIcon}>
-                <Feather name="edit-3" size={30} color={colors.black} />
-              </TouchableOpacity>
+            <TouchableOpacity style={TaskStyle.editIcon}>
+              <Feather name="edit-3" size={30} color={colors.black} />
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            overScrollMode="never"
+            vertical
+            showsVerticalScrollIndicator={false}
+            style={TaskStyle.modalMain}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                tintColor={colors.lightgray}
+                // title={"refreshing..."}
+                // titleColor={colors.lightgray}
+                progressViewOffset={-15}
+              />
+            }
+          >
+            <View style={TaskStyle.modalTaskTxtBox}>
+              <Text style={TaskStyle.modalTaskTimeText}>{data.time}</Text>
             </View>
 
-            <ScrollView
-              overScrollMode="never"
-              vertical
-              showsVerticalScrollIndicator={false}
-              style={TaskStyle.modalMain}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                  tintColor={colors.lightgray}
-                  progressViewOffset={-15}
-                />
-              }
-            >
-              <View style={TaskStyle.modalTaskTxtBox}>
-                <Text style={TaskStyle.modalTaskTimeText}>{data.time}</Text>
-              </View>
+            <View style={TaskStyle.modalTaskTxtBox}>
+              <Text style={TaskStyle.modalTaskTitleText}>{data.title}</Text>
+            </View>
 
-              <View style={TaskStyle.modalTaskTxtBox}>
-                <Text style={TaskStyle.modalTaskTitleText}>{data.title}</Text>
-              </View>
+            <View style={TaskStyle.modalTaskTxtBox}>
+              <Text style={TaskStyle.modalTaskDescriptionText}>
+                {data.description}
+              </Text>
+            </View>
 
-              <View style={TaskStyle.modalTaskTxtBox}>
-                <Text style={TaskStyle.modalTaskDescriptionText}>
-                  {data.description}
-                </Text>
-              </View>
+            <View style={TaskStyle.modalIcons}>
+              {data.avatars === 1 && (
+                <View style={TaskStyle.avatarContainerSM}>
+                  <Image source={avatar} style={TaskStyle.avatarM} />
+                </View>
+              )}
 
-              <View style={TaskStyle.modalIcons}>
-                {data.avatars === 1 && (
-                  <View style={TaskStyle.avatarContainerSM}>
+              {data.avatars === 2 && (
+                <View style={TaskStyle.iconM}>
+                  <View style={TaskStyle.avatarContainerM}>
                     <Image source={avatar} style={TaskStyle.avatarM} />
                   </View>
-                )}
-
-                {data.avatars === 2 && (
-                  <View style={TaskStyle.iconM}>
-                    <View style={TaskStyle.avatarContainerM}>
-                      <Image source={avatar} style={TaskStyle.avatarM} />
-                    </View>
-                    <View style={TaskStyle.avatarContainer2M}>
-                      <Image source={avatar} style={TaskStyle.avatar2M} />
-                    </View>
+                  <View style={TaskStyle.avatarContainer2M}>
+                    <Image source={avatar} style={TaskStyle.avatar2M} />
                   </View>
-                )}
-
-                {data.avatars > 2 && (
-                  <View style={TaskStyle.icon3M}>
-                    <View style={TaskStyle.avatarContainerM}>
-                      <Image source={avatar} style={TaskStyle.avatarM} />
-                    </View>
-                    <View style={TaskStyle.avatarContainer2M}>
-                      <Image source={avatar} style={TaskStyle.avatar2M} />
-                    </View>
-                    <View style={TaskStyle.avatarContainer2M}>
-                      <View style={TaskStyle.avatar2pM}>
-                        <Text style={TaskStyle.avatar2pTextM}>
-                          +{data.avatars - 2}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                )}
-              </View>
-
-              {data.plan.length > 0 ? (
-                <>
-                  <Text style={TaskStyle.modalTaskPlanText}>Plan</Text>
-                  {data.plan.map((plan) => (
-                    <View key={plan.id}>{renderTaskPlan(plan)}</View>
-                  ))}
-                </>
-              ) : (
-                <>
-                  <Text style={TaskStyle.modalTaskPlanText2}>
-                    Nothing to display here !
-                  </Text>
-                  <Feather
-                    name="alert-circle"
-                    size={30}
-                    style={TaskStyle.alertIcon}
-                  />
-                </>
+                </View>
               )}
-            </ScrollView>
-          </View>
-        </SafeAreaView>
+
+              {data.avatars > 2 && (
+                <View style={TaskStyle.icon3M}>
+                  <View style={TaskStyle.avatarContainerM}>
+                    <Image source={avatar} style={TaskStyle.avatarM} />
+                  </View>
+                  <View style={TaskStyle.avatarContainer2M}>
+                    <Image source={avatar} style={TaskStyle.avatar2M} />
+                  </View>
+                  <View style={TaskStyle.avatarContainer2M}>
+                    <View style={TaskStyle.avatar2pM}>
+                      <Text style={TaskStyle.avatar2pTextM}>
+                        +{data.avatars - 2}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              )}
+            </View>
+
+            {data.plan.length > 0 ? (
+              <>
+                <Text style={TaskStyle.modalTaskPlanText}>Plan</Text>
+                {data.plan.map((plan) => (
+                  <View key={plan.id}>{renderTaskPlan(plan)}</View>
+                ))}
+              </>
+            ) : (
+              <>
+                <Text style={TaskStyle.modalTaskPlanText2}>
+                  Nothing to display here !
+                </Text>
+                <Feather
+                  name="alert-circle"
+                  size={30}
+                  style={TaskStyle.alertIcon}
+                />
+              </>
+            )}
+          </ScrollView>
+        </View>
       </Modal>
     );
   };

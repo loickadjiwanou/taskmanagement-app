@@ -1,9 +1,16 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, useColorScheme } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  useColorScheme,
+  Modal,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
 import CompletedTaskStyle from "./CompletedTask.style.js";
 import colors from "../../assets/colors/colors.js";
 import { AntDesign, Ionicons, Feather } from "@expo/vector-icons";
-import Modal from "react-native-modal";
 import * as Haptics from "expo-haptics";
 
 const CompletedTask = ({ data, onModalChange }) => {
@@ -13,42 +20,174 @@ const CompletedTask = ({ data, onModalChange }) => {
   const handleTaskModal = () => {
     setTaskModal(!taskModal);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
-    onModalChange(data);
+    onModalChange(taskModal ? null : data);
   };
 
   const renderTaskModal = () => {
     return (
       <Modal
-        isVisible={taskModal}
-        onBackdropPress={() => {
+        animationType="slide"
+        visible={taskModal}
+        presentationStyle="pageSheet"
+        onRequestClose={() => {
           setTaskModal(false);
           onModalChange(null);
         }}
-        style={CompletedTaskStyle.modal}
-        animationIn="fadeInUp"
-        animationOut="fadeOutDown"
-        backdropOpacity={0.6}
-        backdropColor="black"
       >
-        <View style={CompletedTaskStyle.modalContent}>
-          <View style={CompletedTaskStyle.modalBar} />
+        <SafeAreaView
+          style={{
+            flex: 1,
+            backgroundColor: "white",
+            borderTopRightRadius: 100,
+          }}
+        >
+          <View style={CompletedTaskStyle.modalContent}>
+            <View style={CompletedTaskStyle.modalBar} />
 
-          <View style={CompletedTaskStyle.modalTop}>
-            <TouchableOpacity
-              onPress={() => {
-                setTaskModal(false);
-                onModalChange(null);
-              }}
-              style={CompletedTaskStyle.closeIcon}
+            <View style={CompletedTaskStyle.modalTop}>
+              <TouchableOpacity
+                onPress={() => {
+                  setTaskModal(false);
+                  onModalChange(null);
+                }}
+                style={CompletedTaskStyle.closeIcon}
+              >
+                <Ionicons name="close" size={30} color={colors.black} />
+              </TouchableOpacity>
+
+              <TouchableOpacity style={CompletedTaskStyle.editIcon}>
+                <Feather name="edit-3" size={30} color={colors.black} />
+              </TouchableOpacity>
+            </View>
+
+            {/* Contenu du modal pour les tâches complétées */}
+            <ScrollView
+              style={{ flex: 1, padding: 20 }}
+              showsVerticalScrollIndicator={false}
             >
-              <Ionicons name="close" size={30} color={colors.black} />
-            </TouchableOpacity>
+              <View style={{ marginBottom: 20 }}>
+                <Text
+                  style={{
+                    fontSize: 24,
+                    fontWeight: "bold",
+                    color: colors.black,
+                    marginBottom: 10,
+                  }}
+                >
+                  {data.title}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: colors.black,
+                    lineHeight: 22,
+                  }}
+                >
+                  {data.description}
+                </Text>
+              </View>
 
-            <TouchableOpacity style={CompletedTaskStyle.editIcon}>
-              <Feather name="edit-3" size={30} color={colors.black} />
-            </TouchableOpacity>
+              {/* Indicateur de tâche complétée */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  backgroundColor: "#e8f5e8",
+                  padding: 15,
+                  borderRadius: 10,
+                  marginBottom: 20,
+                }}
+              >
+                <AntDesign name="checkcircle" size={24} color="#4caf50" />
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    fontSize: 16,
+                    color: "#4caf50",
+                    fontWeight: "600",
+                  }}
+                >
+                  Tâche terminée
+                </Text>
+              </View>
+
+              {/* Informations supplémentaires */}
+              <View style={{ marginBottom: 20 }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: colors.black,
+                    marginBottom: 5,
+                  }}
+                >
+                  Horaire: {data.time}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: colors.black,
+                    marginBottom: 5,
+                  }}
+                >
+                  Récurrence: {data.delay}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: colors.black,
+                  }}
+                >
+                  Durée: {data.hour}
+                </Text>
+              </View>
+
+              {/* Plan si disponible */}
+              {data.plan && data.plan.length > 0 && (
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "bold",
+                      color: colors.black,
+                      marginBottom: 10,
+                    }}
+                  >
+                    Plan exécuté
+                  </Text>
+                  {data.plan.map((plan) => (
+                    <View
+                      key={plan.id}
+                      style={{
+                        backgroundColor: "#f5f5f5",
+                        padding: 15,
+                        borderRadius: 8,
+                        marginBottom: 10,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: colors.black,
+                          marginBottom: 5,
+                        }}
+                      >
+                        {plan.content}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: "#666",
+                        }}
+                      >
+                        {plan.time}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </ScrollView>
           </View>
-        </View>
+        </SafeAreaView>
       </Modal>
     );
   };

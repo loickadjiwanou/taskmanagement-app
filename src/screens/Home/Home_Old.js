@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   useColorScheme,
   ScrollView,
   RefreshControl,
+  Animated,
 } from "react-native";
 import HomeStyle from "./Home.style.js";
 import landingImage from "../../assets/icons/icon.png";
@@ -226,15 +227,38 @@ const Home = (props) => {
     }, 2000);
   };
 
+  const [modalDisplayed, setModalDisplayed] = useState(false);
+
   const handleModalState = (data) => {
-    //
+    if (data) {
+      setModalDisplayed(true);
+    } else {
+      setModalDisplayed(false);
+    }
   };
 
+  const scaleValue = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    Animated.timing(scaleValue, {
+      toValue: modalDisplayed ? 0.88 : 1,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }, [modalDisplayed]);
+
   return (
-    <View style={HomeStyle.view}>
-      <View style={HomeStyle.backgroundBlur}>
+    <Animated.View
+      style={[
+        HomeStyle.view,
+        {
+          transform: [{ scale: scaleValue }],
+        },
+      ]}
+    >
+      <BlurView intensity={20} tint="dark" style={HomeStyle.backgroundBlur}>
         <CalendarWeek />
-      </View>
+      </BlurView>
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -247,10 +271,6 @@ const Home = (props) => {
             tintColor={colors.white}
           />
         }
-        style={{
-          // marginTop: 250
-          marginTop: 2,
-        }}
       >
         {tasks.map(
           (task) =>
@@ -282,8 +302,7 @@ const Home = (props) => {
         translucent={true}
         backgroundColor="transparent"
       />
-    </View>
+    </Animated.View>
   );
 };
-
 export default Home;

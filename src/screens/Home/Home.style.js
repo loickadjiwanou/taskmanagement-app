@@ -6,10 +6,13 @@ const HomeStyle = StyleSheet.create({
     backgroundColor: colors.black,
   },
   backgroundBlur: {
-    // overflow: "hidden",
+    overflow: "hidden",
+    backgroundColor: "transparent",
+    borderRadius: 30,
+    zIndex: 1,
   },
   footer: {
-    marginBottom: "15%",
+    marginBottom: "10%",
   },
 });
 export default HomeStyle;
